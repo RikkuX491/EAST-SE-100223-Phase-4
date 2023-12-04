@@ -9,7 +9,7 @@
 
 |No. | Lecture                          | Video 	| Starter 	| Solution 	|
 |----|------------------------------	|:-----:	|--------	|---------	|
-|1 | Intro to Flask            | | | |
+|1 | Intro to Flask            | |[01_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/01_starter)| |
 |2 | Flask-SQLAlchemy                	| | | |
 |3 | Modeling Relationships in Flask-SQLAlchemy                 	| | | |
 |4 | REST APIs with Flask (Part 1)                       	| | | |
