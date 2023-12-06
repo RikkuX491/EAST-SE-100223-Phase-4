@@ -16,8 +16,48 @@ db = SQLAlchemy(metadata=metadata)
 class Hotel(db.Model, SerializerMixin):
     __tablename__ = 'hotels'
 
+    # serialize_rules = ('-reviews.hotel', '-reviews.customer')
+    # serialize_only = ('id', 'name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id')
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
+    reviews = db.relationship('Review', back_populates='hotel')
+
+    customers = association_proxy('reviews', 'customer', creator = lambda c: Review(customer = c))
+
     def __repr__(self):
         return f'<Hotel # {self.id}: {self.name}>'
+    
+class Customer(db.Model, SerializerMixin):
+    __tablename__ = 'customers'
+
+    # serialize_rules = ('-reviews.customer', '-reviews.hotel')
+
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String)
+    last_name = db.Column(db.String)
+
+    reviews = db.relationship('Review', back_populates='customer')
+
+    hotels = association_proxy('reviews', 'hotel', creator = lambda h : Review(hotel = h))
+
+    def __repr__(self):
+        return f'<Customer # {self.id}: {self.first_name} {self.last_name}>'
+    
+class Review(db.Model, SerializerMixin):
+    __tablename__ = 'reviews'
+
+    # serialize_rules = ('-hotel.reviews', '-customer.reviews')
+
+    id = db.Column(db.Integer, primary_key=True)
+    rating = db.Column(db.Integer)
+
+    hotel_id = db.Column(db.Integer, db.ForeignKey('hotels.id'))
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
+
+    hotel = db.relationship('Hotel', back_populates='reviews')
+    customer = db.relationship('Customer', back_populates='reviews')
+
+    def __repr__(self):
+        return f'<Review # {self.id}: {self.customer.first_name} {self.customer.last_name} left a review for {self.hotel.name} with a rating of {self.rating}>'
