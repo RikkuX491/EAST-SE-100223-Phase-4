@@ -1,20 +1,17 @@
-# Lecture # 2 - Flask-SQLAlchemy
+# Lecture # 3 - Modeling Relationships in Flask-SQLAlchemy
 
 ## Lecture Topics
 
-- Flask-SQLAlchemy
-- Database Migration
-- Flask Shell
-- Querying a Database in a Flask Application
-- Seeding a Database
-- Serialization
-- Returning a JSON response
+- One-To-Many Relationships with Flask-SQLAlchemy
+- Many-To-Many Relationships with Flask-SQLAlchemy
+- Association Proxy
+- Serialization with Relationships
 
 ## Setup
 
 1. Clone this repository.
 
-2. Enter the command `git checkout 02_starter` in your terminal to switch to the `02_starter` branch that contains the content for this lecture.
+2. Enter the command `git checkout 03_starter` in your terminal to switch to the `03_starter` branch that contains the content for this lecture.
 
 3. Make sure that you are in the correct directory (folder) that contains a `Pipfile`, then enter the command `pipenv install` in your terminal to install the required libraries.
 
