@@ -11,7 +11,7 @@
 |----|------------------------------	|:-----:	|--------	|---------	|
 |1 | Intro to Flask            |[Video](https://www.youtube.com/watch?v=GCR-DNy1sfE)|[01_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/01_starter)|[01_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/01_solution)|
 |2 | Flask-SQLAlchemy                	|[Video](https://www.youtube.com/watch?v=iUfBJV5pnkA)|[02_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/02_starter)|[02_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/02_solution)|
-|3 | Modeling Relationships in Flask-SQLAlchemy                 	| | | |
+|3 | Modeling Relationships in Flask-SQLAlchemy                 	| |[03_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/03_starter)|[03_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/03_solution)|
 |4 | REST APIs with Flask (Part 1)                       	| | | |
 |5 | REST APIs with Flask (Part 2)    	| | | |
 |6 | Client & Server Communication                    	| | | |
