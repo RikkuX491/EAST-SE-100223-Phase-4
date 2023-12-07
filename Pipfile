@@ -8,6 +8,7 @@ flask = "2.2.2"
 flask-migrate = "3.1.0"
 flask-sqlalchemy = "3.0.3"
 sqlalchemy-serializer = "*"
+flask-restful = "0.3.9"
 ipdb = "0.13.9"
 
 [requires]

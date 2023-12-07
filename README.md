@@ -1,17 +1,16 @@
-# Lecture # 3 - Modeling Relationships in Flask-SQLAlchemy
+# Lecture # 4 - REST APIs with Flask (Part 1)
 
 ## Lecture Topics
 
-- One-To-Many Relationships with Flask-SQLAlchemy
-- Many-To-Many Relationships with Flask-SQLAlchemy
-- Association Proxy
-- Serialization with Relationships
+- Building REST APIs with `flask-restful`
+- Retrieve with `flask-restful` (handling `GET` requests)
+- Create with `flask-restful` (handling `POST` requests)
 
 ## Setup
 
 1. Clone this repository.
 
-2. Enter the command `git checkout 03_starter` in your terminal to switch to the `03_starter` branch that contains the content for this lecture.
+2. Enter the command `git checkout 04_starter` in your terminal to switch to the `04_starter` branch that contains the content for this lecture.
 
 3. Make sure that you are in the correct directory (folder) that contains a `Pipfile`, then enter the command `pipenv install` in your terminal to install the required libraries.
 

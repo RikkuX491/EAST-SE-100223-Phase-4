@@ -2,8 +2,9 @@
 
 import ipdb
 
-from flask import Flask, make_response
+from flask import Flask, make_response, request
 from flask_migrate import Migrate
+from flask_restful import Api, Resource
 
 from models import db, Hotel, Customer, Review
 
