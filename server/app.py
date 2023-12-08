@@ -37,11 +37,17 @@ class AllHotels(Resource):
         return make_response(response_body, 200)
     
     def post(self):
-        new_hotel = Hotel(name=request.json.get('name'))
-        db.session.add(new_hotel)
-        db.session.commit()
-        response_body = new_hotel.to_dict(only=('id', 'name'))
-        return make_response(response_body, 201)
+        try:
+            new_hotel = Hotel(name=request.json.get('name'))
+            db.session.add(new_hotel)
+            db.session.commit()
+            response_body = new_hotel.to_dict(only=('id', 'name'))
+            return make_response(response_body, 201)
+        except(ValueError):
+            response_body = {
+                "error": "Invalid value for hotel!"
+            }
+            return make_response(response_body, 422)
 
 api.add_resource(AllHotels, '/hotels')
 
@@ -91,6 +97,37 @@ class CustomerById(Resource):
         if customer:
             response_body = customer.to_dict(only=('id', 'first_name', 'last_name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
             return make_response(response_body, 200)
+        else:
+            response_body = {
+                'error': 'Customer Not Found'
+            }
+            return make_response(response_body, 404)
+        
+    def patch(self, id):
+        customer = Customer.query.filter(Customer.id == id).first()
+
+        if customer:
+            for attr in request.json:
+                setattr(customer, attr, request.json.get(attr))
+
+            db.session.commit()
+
+            response_body = customer.to_dict(only=('id', 'first_name', 'last_name'))
+            return make_response(response_body, 200)
+        else:
+            response_body = {
+                'error': 'Customer Not Found'
+            }
+            return make_response(response_body, 404)
+        
+    def delete(self, id):
+        customer = Customer.query.filter(Customer.id == id).first()
+
+        if customer:
+            db.session.delete(customer)
+            db.session.commit()
+            response_body = {}
+            return make_response(response_body, 204)
         else:
             response_body = {
                 'error': 'Customer Not Found'

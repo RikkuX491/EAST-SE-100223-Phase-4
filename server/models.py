@@ -1,3 +1,5 @@
+import ipdb
+
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
@@ -18,11 +20,18 @@ class Hotel(db.Model, SerializerMixin):
     __tablename__ = 'hotels'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String, nullable=False, unique=True)
 
-    reviews = db.relationship('Review', back_populates='hotel')
+    reviews = db.relationship('Review', back_populates='hotel', cascade='all, delete-orphan')
 
     customers = association_proxy('reviews', 'customer', creator = lambda c: Review(customer = c))
+
+    @validates('name')
+    def validate_name(self, attr, value):
+        if not (len(value) >= 5):
+            raise ValueError(f'{attr} must be at least 5 characters long!')
+        else:
+            return value
 
     def __repr__(self):
         return f'<Hotel # {self.id}: {self.name}>'
@@ -34,7 +43,11 @@ class Customer(db.Model, SerializerMixin):
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
 
-    reviews = db.relationship('Review', back_populates='customer')
+    __table_args__ = (
+        db.CheckConstraint('first_name != last_name'),
+    )
+
+    reviews = db.relationship('Review', back_populates='customer', cascade='all, delete-orphan')
 
     hotels = association_proxy('reviews', 'hotel', creator = lambda h : Review(hotel = h))
 
