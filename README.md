@@ -1,16 +1,15 @@
-# Lecture # 4 - REST APIs with Flask (Part 1)
+# Lecture # 5 - REST APIs with Flask (Part 2)
 
 ## Lecture Topics
 
-- Building REST APIs with `flask-restful`
-- Retrieve with `flask-restful` (handling `GET` requests)
-- Create with `flask-restful` (handling `POST` requests)
+- Update with `flask-restful` (handling `PATCH` requests)
+- Delete with `flask-restful` (handling `DELETE` requests)
 
 ## Setup
 
 1. Clone this repository.
 
-2. Enter the command `git checkout 04_starter` in your terminal to switch to the `04_starter` branch that contains the content for this lecture.
+2. Enter the command `git checkout 05_starter` in your terminal to switch to the `05_starter` branch that contains the content for this lecture.
 
 3. Make sure that you are in the correct directory (folder) that contains a `Pipfile`, then enter the command `pipenv install` in your terminal to install the required libraries.
 

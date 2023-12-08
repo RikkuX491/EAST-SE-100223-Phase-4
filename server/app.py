@@ -62,85 +62,79 @@ class HotelById(Resource):
     
 api.add_resource(HotelById, '/hotels/<int:id>')
 
-# @app.route('/hotels', methods=["GET", "POST"])
-# def all_hotels():
-    # if request.method == 'GET':
-    #     hotels = Hotel.query.all()
+class AllCustomers(Resource):
 
-    #     response_body = []
+    def get(self):
+        customers = Customer.query.all()
 
-    #     for hotel in hotels:
-    #         response_body.append(hotel.to_dict(only=('id', 'name')))
-            
-    #     return make_response(response_body, 200)
+        response_body = []
+
+        for customer in customers:
+            response_body.append(customer.to_dict(only=('id', 'first_name', 'last_name')))
+
+        return make_response(response_body, 200)
     
-    # elif request.method == 'POST':
-    #     new_hotel = Hotel(name=request.json.get('name'))
-    #     db.session.add(new_hotel)
-    #     db.session.commit()
-    #     response_body = new_hotel.to_dict(only=('id', 'name'))
-    #     return make_response(response_body, 201)
+    def post(self):
+        new_customer = Customer(first_name=request.json.get('first_name'), last_name=request.json.get('last_name'))
+        db.session.add(new_customer)
+        db.session.commit()
+        response_body = new_customer.to_dict(only=('id', 'first_name', 'last_name'))
+        return make_response(response_body, 201)
+    
+api.add_resource(AllCustomers, '/customers')
 
-# @app.route('/hotels/<int:id>')
-# def hotel_by_id(id):
-#     hotel = Hotel.query.filter(Hotel.id == id).first()
+class CustomerById(Resource):
 
-#     if hotel:
-#         response_body = hotel.to_dict(only=('id', 'name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
-#         return make_response(response_body, 200)
-#     else:
-#         response_body = {
-#             'error': 'Hotel Not Found'
-#         }
-#         return make_response(response_body, 404)
+    def get(self, id):
+        customer = Customer.query.filter(Customer.id == id).first()
 
-@app.route('/customers')
-def get_customers():
-    customers = Customer.query.all()
+        if customer:
+            response_body = customer.to_dict(only=('id', 'first_name', 'last_name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
+            return make_response(response_body, 200)
+        else:
+            response_body = {
+                'error': 'Customer Not Found'
+            }
+            return make_response(response_body, 404)
 
-    response_body = []
+api.add_resource(CustomerById, '/customers/<int:id>')
 
-    for customer in customers:
-        response_body.append(customer.to_dict(only=('id', 'first_name', 'last_name')))
+class AllReviews(Resource):
 
-    return make_response(response_body, 200)
+    def get(self):
+        reviews = Review.query.all()
 
-@app.route('/customers/<int:id>')
-def customer_by_id(id):
-    customer = Customer.query.filter(Customer.id == id).first()
+        response_body = []
 
-    if customer:
-        response_body = customer.to_dict(only=('id', 'first_name', 'last_name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
+        for review in reviews:
+            response_body.append(review.to_dict(rules=('-hotel', '-customer')))
+
         return make_response(response_body, 200)
-    else:
-        response_body = {
-            'error': 'Customer Not Found'
-        }
-        return make_response(response_body, 404)
+    
+    def post(self):
+        new_review = Review(rating=request.json.get('rating'), hotel_id=request.json.get('hotel_id'), customer_id=request.json.get('customer_id'))
+        db.session.add(new_review)
+        db.session.commit()
+        response_body = new_review.to_dict(only=('id', 'rating', 'hotel_id', 'customer_id'))
+        return make_response(response_body, 201)
+    
+api.add_resource(AllReviews, '/reviews')
 
-@app.route('/reviews')
-def get_reviews():
-    reviews = Review.query.all()
+class ReviewById(Resource):
 
-    response_body = []
+    def get(self, id):
+        review = Review.query.filter(Review.id == id).first()
 
-    for review in reviews:
-        response_body.append(review.to_dict(rules=('-hotel', '-customer')))
-
-    return make_response(response_body, 200)
-
-@app.route('/reviews/<int:id>')
-def review_by_id(id):
-    review = Review.query.filter(Review.id == id).first()
-
-    if review:
-        response_body = review.to_dict(rules=('-hotel.reviews', ('-customer.reviews')))
-        return make_response(response_body, 200)
-    else:
-        response_body = {
-            'error': 'Review Not Found'
-        }
-        return make_response(response_body, 404)
+        if review:
+            response_body = review.to_dict(rules=('-hotel.reviews', ('-customer.reviews')))
+            return make_response(response_body, 200)
+        else:
+            response_body = {
+                'error': 'Review Not Found'
+            }
+            return make_response(response_body, 404)
+        
+api.add_resource(ReviewById, '/reviews/<int:id>')
 
 if __name__ == "__main__":
     app.run(port=7777, debug=True)

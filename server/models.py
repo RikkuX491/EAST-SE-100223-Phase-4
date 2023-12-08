@@ -2,6 +2,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.orm import validates
 
 # contains definitions of tables and associated schema constructs
 # read more about Metadata using the link at the bottom of the page
@@ -16,9 +17,6 @@ db = SQLAlchemy(metadata=metadata)
 class Hotel(db.Model, SerializerMixin):
     __tablename__ = 'hotels'
 
-    # serialize_rules = ('-reviews.hotel', '-reviews.customer')
-    # serialize_only = ('id', 'name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id')
-
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
 
@@ -31,8 +29,6 @@ class Hotel(db.Model, SerializerMixin):
     
 class Customer(db.Model, SerializerMixin):
     __tablename__ = 'customers'
-
-    # serialize_rules = ('-reviews.customer', '-reviews.hotel')
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
@@ -47,8 +43,6 @@ class Customer(db.Model, SerializerMixin):
     
 class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
-
-    # serialize_rules = ('-hotel.reviews', '-customer.reviews')
 
     id = db.Column(db.Integer, primary_key=True)
     rating = db.Column(db.Integer)
