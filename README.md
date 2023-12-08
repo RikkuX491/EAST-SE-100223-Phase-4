@@ -4,6 +4,9 @@
 
 - Update with `flask-restful` (handling `PATCH` requests)
 - Delete with `flask-restful` (handling `DELETE` requests)
+- SQLAlchemy Constraints
+- Flask-SQLAlchemy Validations
+- Cascades
 
 ## Setup
 
