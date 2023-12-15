@@ -44,7 +44,7 @@ class AllHotels(Resource):
             db.session.commit()
             response_body = new_hotel.to_dict(only=('id', 'name'))
             return make_response(response_body, 201)
-        except(ValueError):
+        except:
             response_body = {
                 "error": "Invalid value for hotel!"
             }
@@ -61,6 +61,42 @@ class HotelById(Resource):
             response_body = hotel.to_dict(only=('id', 'name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
             response_body['customers'] = [customer.to_dict(only=('id', 'first_name', 'last_name')) for customer in list(set(hotel.customers))]
             return make_response(response_body, 200)
+        else:
+            response_body = {
+                'error': 'Hotel Not Found'
+            }
+            return make_response(response_body, 404)
+        
+    def patch(self, id):
+        hotel = Hotel.query.filter(Hotel.id == id).first()
+        
+        if hotel:
+            try:
+                for attr in request.json:
+                    setattr(hotel, attr, request.json.get(attr))
+                
+                db.session.commit()
+                response_body = hotel.to_dict(only=('id', 'name'))
+                return make_response(response_body, 200)
+            except:
+                response_body = {
+                    "error": "Invalid value for hotel!"
+                }
+                return make_response(response_body, 422)
+        else:
+            response_body = {
+                'error': 'Hotel Not Found'
+            }
+            return make_response(response_body, 404)
+        
+    def delete(self, id):
+        hotel = Hotel.query.filter(Hotel.id == id).first()
+        
+        if hotel:
+            db.session.delete(hotel)
+            db.session.commit()
+            response_body = {}
+            return make_response(response_body, 204)
         else:
             response_body = {
                 'error': 'Hotel Not Found'
