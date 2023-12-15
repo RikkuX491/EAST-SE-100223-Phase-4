@@ -10,6 +10,7 @@ flask-sqlalchemy = "3.0.3"
 sqlalchemy-serializer = "*"
 flask-restful = "0.3.9"
 ipdb = "0.13.9"
+flask-cors = "3.0.10"
 
 [requires]
 python_full_version = "3.8.13"
