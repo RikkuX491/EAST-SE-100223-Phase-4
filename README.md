@@ -1,18 +1,16 @@
-# Lecture # 5 - REST APIs with Flask (Part 2)
+# Lecture # 6 - Client & Server Communication
 
 ## Lecture Topics
 
-- Update with `flask-restful` (handling `PATCH` requests)
-- Delete with `flask-restful` (handling `DELETE` requests)
-- SQLAlchemy Constraints
-- Flask-SQLAlchemy Validations
-- Cascades
+- Adding React to Flask
+- CORS (Cross-Origin Resource Sharing)
+- How to proxy the requests to our API
 
 ## Setup
 
 1. Clone this repository.
 
-2. Enter the command `git checkout 05_starter` in your terminal to switch to the `05_starter` branch that contains the content for this lecture.
+2. Enter the command `git checkout 06_starter` in your terminal to switch to the `06_starter` branch that contains the content for this lecture.
 
 3. Make sure that you are in the correct directory (folder) that contains a `Pipfile`, then enter the command `pipenv install` in your terminal to install the required libraries.
 
