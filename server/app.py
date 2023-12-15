@@ -17,6 +17,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotels.db'
 # disable modification tracking to use less memory
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+CORS(app)
+
 # create a Migrate object to manage schema modifications
 migrate = Migrate(app, db)
 
@@ -211,4 +213,4 @@ class ReviewById(Resource):
 api.add_resource(ReviewById, '/reviews/<int:id>')
 
 if __name__ == "__main__":
-    app.run(port=7777, debug=True)
+    app.run(port=7000, debug=True)
