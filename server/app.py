@@ -5,6 +5,7 @@ import ipdb
 from flask import Flask, make_response, request
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from flask_cors import CORS
 
 from models import db, Hotel, Customer, Review
 
