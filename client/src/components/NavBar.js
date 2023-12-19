@@ -9,7 +9,7 @@ function NavBar(){
             <div>
                 <NavLink to="/add_hotel">Add Hotel</NavLink>
                 <NavLink to="/update_hotel">Update Hotel</NavLink>
-                <NavLink onClick={() => console.log("logged out")} to="/">Logout</NavLink>
+                <NavLink to="/">Logout</NavLink>
             </div>
         </nav>
     )
