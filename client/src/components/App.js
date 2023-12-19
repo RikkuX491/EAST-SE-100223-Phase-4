@@ -1,118 +1,133 @@
 import '../App.css';
 import {useState, useEffect} from 'react'
+import {createBrowserRouter, RouterProvider} from "react-router-dom"
 
-import HotelsList from "./HotelsList"
+import Home from './Home'
+import HotelList from "./HotelList"
 import AddHotelForm from "./AddHotelForm"
 import UpdateHotelForm from "./UpdateHotelForm"
 
 function App() {
-  const [hotels, setHotels] = useState([])
-  const [formData, setFormData] = useState({
-    name: ""
-  })
-  const [patchFormData, setPatchFormData] = useState({
-    name: ""
-  })
-  const [hotelIDForUpdate, setHotelIDForUpdate] = useState(null)
 
-  // GET request to get all hotels
+  const [customer, setCustomer] = useState(null)
+  const [loginFormData, setLoginFormData] = useState({})
+  
+  const [hotels, setHotels] = useState([])
+  const [postFormData, setPostFormData] = useState({})
+  const [idToUpdate, setIdToUpdate] = useState(0)
+  const [patchFormData, setPatchFormData] = useState({})
+
   useEffect(() => {
     fetch('/hotels')
     .then(response => response.json())
-    .then(hotelsData => {
-      setHotels(hotelsData)
-      if(hotelsData.length > 0){
-        setHotelIDForUpdate(hotelsData[0].id)
-      }
-    })
+    .then(hotelData => setHotels(hotelData))
   }, [])
 
-  // DELETE request to delete a hotel
+  useEffect(() => {
+    if(hotels.length > 0 && hotels[0].id){
+      setIdToUpdate(hotels[0].id)
+    }
+  }, [hotels])
+
+  function addHotel(event){
+    event.preventDefault()
+
+    fetch('/hotels', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(postFormData)
+    })
+    .then(response => response.json())
+    .then(newHotel => setHotels(hotels => [...hotels, newHotel]))
+  }
+
+  function updateHotel(event){
+    event.preventDefault()
+    fetch(`/hotels/${idToUpdate}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(patchFormData)
+    })
+    .then(response => response.json())
+    .then(updatedHotel => {
+      setHotels(hotels => {
+        return hotels.map(hotel => {
+          if(hotel.id === updatedHotel.id){
+            return updatedHotel
+          }
+          else{
+            return hotel
+          }
+        })
+      })
+    })
+  }
+
   function deleteHotel(id){
     fetch(`/hotels/${id}`, {
       method: "DELETE"
     })
-    .then(response => {
-      if(response.ok){
-        setHotels(hotels.filter(hotel => {
-          return hotel.id !== id
-        }))
-      }
-      else{
-        alert("Error: Unable to delete hotel!")
-      }
-    })
-  }
-
-  function updateFormData(event){
-    setFormData({...formData, [event.target.name]: event.target.value})
-  }
-
-  // POST request to add new hotel
-  function addHotel(event){
-    event.preventDefault()
-    fetch('/hotels', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(newHotel => setHotels([...hotels, newHotel]))
-  }
-
-  function updateHotelIDForPatch(event){
-    setHotelIDForUpdate(event.target.value)
-  }
-
-  // PATCH request to update hotel
-  function updateHotel(event){
-    event.preventDefault()
-    if(!hotelIDForUpdate){
-      alert("Error: Invalid ID for hotel to update!")
-    }
-    else{
-      fetch(`/hotels/${hotelIDForUpdate}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(patchFormData)
+    .then(() => setHotels(hotels => {
+      return hotels.filter(hotel => {
+        return hotel.id !== id
       })
-      .then(response => {
-        if(response.ok){
-          response.json().then(updatedHotel => {
-            setHotels(hotels.map(hotel => {
-              if(hotel.id === updatedHotel.id){
-                return updatedHotel
-              }
-              else{
-                return hotel
-              }
-            }))
-          })
-        }
-        else{
-          alert("Error: Unable to update hotel!")
-        }
-      })
-    }
+    }))
+  }
+
+  function updatePostFormData(event){
+    setPostFormData({...postFormData, [event.target.name]: event.target.value})
   }
 
   function updatePatchFormData(event){
-    setPatchFormData({[event.target.name]: event.target.value})
+    setPatchFormData({...patchFormData, [event.target.name]: event.target.value})
   }
+
+  function logInCustomer(event){
+    event.preventDefault()
+    setCustomer({
+      username: loginFormData.username
+    })
+  }
+
+  function updateLoginFormData(event){
+    setLoginFormData({...loginFormData, [event.target.name]: event.target.value})
+  }
+
+  const routes = [
+    {
+      path: "/",
+      element: <Home customer={customer} logInCustomer={logInCustomer} updateLoginFormData={updateLoginFormData}/>,
+      children: [
+        {
+          path: "/",
+          element: <>
+            <h1>Welcome! Here is the list of hotels available:</h1>
+            <HotelList hotels={hotels} deleteHotel={deleteHotel}/>
+          </>
+        },
+        {
+          path: "/add_hotel",
+          element: <AddHotelForm addHotel={addHotel} updatePostFormData={updatePostFormData}/>
+        },
+        {
+          path: "/update_hotel",
+          element: <UpdateHotelForm updateHotel={updateHotel} setIdToUpdate={setIdToUpdate} updatePatchFormData={updatePatchFormData} hotels={hotels}/>
+        }
+      ]
+    }
+  ]
+
+  const router = createBrowserRouter(routes)
 
   return (
     <div className="App">
-      <HotelsList hotels={hotels} deleteHotel={deleteHotel}/>
-
-      {/* POST request - Form to add new hotel */}
-      <AddHotelForm addHotel={addHotel} updateFormData={updateFormData} formData={formData}/>
-
-      {/* PATCH request - Form to update a hotel */}
-      <UpdateHotelForm hotels={hotels} updateHotel={updateHotel} updatePatchFormData={updatePatchFormData} updateHotelIDForPatch={updateHotelIDForPatch}/>
+      <RouterProvider router={router}/>
     </div>
   );
 }

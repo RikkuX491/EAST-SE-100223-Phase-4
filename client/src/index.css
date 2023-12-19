@@ -1,13 +1,173 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --green: rgb(39, 189, 39);
+  --orange: rgb(255, 165, 0);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Playfair Display", serif;
+}
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+.favorite-button {
+  border: none;
+  background: none;
+  padding: 0 0.25rem;
+  cursor: pointer;
+  color: transparent;
+  text-shadow: 0 0 0 gray;
+}
+
+.favorite-button.active,
+.favorite-button:hover {
+  text-shadow: 0 0 0 gold;
+  cursor: pointer;
+}
+
+.adopt-button {
+  padding: 0.25rem 1rem;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  background-color: var(--green);
+  color: white;
+}
+
+.likes-button{
+  padding: 0.25rem 1rem;
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+  background-color: var(--orange);
+  color: white;
+}
+
+.app {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+nav a {
+  font-size: 1rem;
+  display: inline-block;
+  background-color: #fff8e7;
+  border: 1px solid salmon;
+  margin: 1rem;
+  padding: 1rem;
+  text-decoration: none;
+  color: salmon;
+  cursor: pointer;
+}
+
+header h1 {
+  font-size: 2.5em;
+  font-weight: 900;
+  text-align: center;
+  padding: 0.5rem 0;
+}
+
+.logo {
+  font-size: 1.25em;
+  padding-left: 0.5rem;
+  text-shadow: 0 0 0 var(--green);
+}
+
+main {
+  padding: 0 1rem;
+}
+
+.hotel-form {
+  padding: 2rem 1rem;
+  margin: 2rem 0;
+  background-color: rgba(181, 250, 181, 0.5);
+}
+
+.hotel-form form {
+  display: flex;
+  justify-content: center;
+}
+
+.hotel-form input {
+  margin-right: 2rem;
+  flex: 1;
+}
+
+.hotel-form button {
+  width: 150px;
+}
+
+.searchbar {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+}
+
+input {
+  padding: 0.25rem;
+  border: none;
+  font-family: inherit;
+  font-size: 1.2em;
+  border-bottom: 2px solid gray;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--green);
+}
+
+.hotel-list {
+  list-style: none;
+}
+
+.hotel {
+  margin: 1rem;
+}
+
+.hotel img {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .hotel-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .hotel {
+    width: calc(33% - 2rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hotel {
+    width: calc(25% - 2rem);
+  }
+}
+
+@media (min-width: 1200px) {
+  .hotel {
+    width: calc(20% - 2rem);
+  }
 }

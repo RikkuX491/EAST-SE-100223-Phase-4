@@ -2,7 +2,7 @@
 
 import ipdb
 
-from flask import Flask, make_response, request
+from flask import Flask, make_response, request, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
@@ -10,6 +10,8 @@ from flask_cors import CORS
 from models import db, Hotel, Customer, Review
 
 app = Flask(__name__)
+
+app.secret_key = b'\x9f7w\x91\x1drVp\xd74\xa4v\x96\x04\xf3\xdd'
 
 # configure a database connection to the local file hotels.db
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///hotels.db'
@@ -35,16 +37,16 @@ class AllHotels(Resource):
         response_body = []
 
         for hotel in hotels:
-            response_body.append(hotel.to_dict(only=('id', 'name')))
+            response_body.append(hotel.to_dict(rules=('-reviews',)))
             
         return make_response(response_body, 200)
     
     def post(self):
         try:
-            new_hotel = Hotel(name=request.json.get('name'))
+            new_hotel = Hotel(name=request.json.get('name'), image=request.json.get('image'))
             db.session.add(new_hotel)
             db.session.commit()
-            response_body = new_hotel.to_dict(only=('id', 'name'))
+            response_body = new_hotel.to_dict(rules=('-reviews',))
             return make_response(response_body, 201)
         except:
             response_body = {
@@ -60,7 +62,7 @@ class HotelById(Resource):
         hotel = Hotel.query.filter(Hotel.id == id).first()
 
         if hotel:
-            response_body = hotel.to_dict(only=('id', 'name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
+            response_body = hotel.to_dict(only=('id', 'name', 'image', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
             response_body['customers'] = [customer.to_dict(only=('id', 'first_name', 'last_name')) for customer in list(set(hotel.customers))]
             return make_response(response_body, 200)
         else:
@@ -78,7 +80,7 @@ class HotelById(Resource):
                     setattr(hotel, attr, request.json.get(attr))
                 
                 db.session.commit()
-                response_body = hotel.to_dict(only=('id', 'name'))
+                response_body = hotel.to_dict(rules=('-reviews',))
                 return make_response(response_body, 200)
             except:
                 response_body = {

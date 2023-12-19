@@ -1,8 +1,8 @@
-"""Create tables and columns
+"""Create tables and columns for hotels database
 
-Revision ID: 0ab7f08c4575
+Revision ID: b083b283020d
 Revises: 
-Create Date: 2023-12-08 11:19:20.099645
+Create Date: 2023-12-19 10:02:43.375988
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '0ab7f08c4575'
+revision = 'b083b283020d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,12 +22,14 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(), nullable=True),
     sa.Column('last_name', sa.String(), nullable=True),
+    sa.Column('username', sa.String(), nullable=False),
     sa.CheckConstraint('first_name != last_name'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('hotels',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
+    sa.Column('image', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )

@@ -21,6 +21,7 @@ class Hotel(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
+    image = db.Column(db.String, nullable=False)
 
     reviews = db.relationship('Review', back_populates='hotel', cascade='all, delete-orphan')
 
@@ -42,6 +43,7 @@ class Customer(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
+    username = db.Column(db.String, nullable=False)
 
     __table_args__ = (
         db.CheckConstraint('first_name != last_name'),
