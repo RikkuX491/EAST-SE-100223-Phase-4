@@ -3,9 +3,9 @@ import Header from "./Header"
 import LoginForm from "./LoginForm"
 import {Outlet} from "react-router-dom"
 
-function Home({customer, logInCustomer, updateLoginFormData}){
+function Home({customer, logInCustomer, logOutCustomer, updateLoginFormData}){
     return <>
-        <NavBar/>
+        <NavBar customer={customer} logOutCustomer={logOutCustomer}/>
         <Header/>
         {customer ? 
             <>

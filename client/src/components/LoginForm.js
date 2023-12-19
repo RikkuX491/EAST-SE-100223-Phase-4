@@ -8,7 +8,7 @@ function LoginForm({logInCustomer, updateLoginFormData}){
             <form onSubmit={logInCustomer}>
                 <label>Username: </label>
                 <input onChange={updateLoginFormData} type="text" name="username" placeholder="Enter your username..."/>
-                <input type="submit" value="Update Hotel"/>
+                <input type="submit" value="Login"/>
             </form>
         </div>
     )

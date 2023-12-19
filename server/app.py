@@ -117,7 +117,7 @@ class AllCustomers(Resource):
         response_body = []
 
         for customer in customers:
-            response_body.append(customer.to_dict(only=('id', 'first_name', 'last_name')))
+            response_body.append(customer.to_dict(rules=('-reviews',)))
 
         return make_response(response_body, 200)
     
@@ -136,7 +136,7 @@ class CustomerById(Resource):
         customer = Customer.query.filter(Customer.id == id).first()
 
         if customer:
-            response_body = customer.to_dict(only=('id', 'first_name', 'last_name', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
+            response_body = customer.to_dict(only=('id', 'first_name', 'last_name', 'username', 'reviews.id', 'reviews.rating', 'reviews.hotel_id', 'reviews.customer_id'))
             return make_response(response_body, 200)
         else:
             response_body = {
@@ -153,7 +153,7 @@ class CustomerById(Resource):
 
             db.session.commit()
 
-            response_body = customer.to_dict(only=('id', 'first_name', 'last_name'))
+            response_body = customer.to_dict(rules=('-reviews',))
             return make_response(response_body, 200)
         else:
             response_body = {
@@ -213,6 +213,50 @@ class ReviewById(Resource):
             return make_response(response_body, 404)
         
 api.add_resource(ReviewById, '/reviews/<int:id>')
+
+class Login(Resource):
+
+    def post(self):
+        customer = Customer.query.filter_by(username=request.json.get('username')).first()
+
+        if customer:
+            session['customer_id'] = customer.id
+            response_body = customer.to_dict(rules=('-reviews',))
+            return make_response(response_body, 201)
+        else:
+            response_body = {
+                "error": "Invalid username!"
+            }
+            return make_response(response_body, 401)
+
+api.add_resource(Login, '/login')
+
+class CheckSession(Resource):
+
+    def get(self):
+        customer = Customer.query.filter_by(id=session.get('customer_id')).first()
+
+        if customer:
+            response_body = customer.to_dict(rules=('-reviews',))
+            return make_response(response_body, 200)
+        else:
+            response_body = {
+                "error": "Please log in!"
+            }
+            return make_response(response_body, 401)
+
+api.add_resource(CheckSession, '/check_session')
+
+class Logout(Resource):
+
+    def delete(self):
+        session['customer_id'] = None
+        # del session['customer_id']
+        print(session)
+        response_body = {}
+        return make_response(response_body, 204)
+
+api.add_resource(Logout, '/logout')
 
 if __name__ == "__main__":
     app.run(port=7000, debug=True)

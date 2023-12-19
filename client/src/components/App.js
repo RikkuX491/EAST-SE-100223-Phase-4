@@ -18,6 +18,15 @@ function App() {
   const [patchFormData, setPatchFormData] = useState({})
 
   useEffect(() => {
+    fetch('/check_session')
+    .then(response => {
+      if(response.ok){
+        response.json().then(customerData => setCustomer(customerData))
+      }
+    })
+  }, [])
+
+  useEffect(() => {
     fetch('/hotels')
     .then(response => response.json())
     .then(hotelData => setHotels(hotelData))
@@ -90,8 +99,26 @@ function App() {
 
   function logInCustomer(event){
     event.preventDefault()
-    setCustomer({
-      username: loginFormData.username
+
+    fetch('/login', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(loginFormData)
+    })
+    .then(response => {
+      if(response.ok){
+        response.json().then(customerData => {
+          setCustomer(customerData)
+        })
+      }
+      else if(response.status === 401){
+        alert("Error: Invalid username!")
+      }
+      else{
+        alert("Error: Unable to log in customer!")
+      }
     })
   }
 
@@ -99,10 +126,24 @@ function App() {
     setLoginFormData({...loginFormData, [event.target.name]: event.target.value})
   }
 
+  function logOutCustomer(){
+    fetch('/logout', {
+      method: "DELETE"
+    })
+    .then(response => {
+      if(response.ok){
+        setCustomer(null)
+      }
+      else{
+        alert("Error: Unable to log out customer!")
+      }
+    })
+  }
+
   const routes = [
     {
       path: "/",
-      element: <Home customer={customer} logInCustomer={logInCustomer} updateLoginFormData={updateLoginFormData}/>,
+      element: <Home customer={customer} logInCustomer={logInCustomer} logOutCustomer={logOutCustomer} updateLoginFormData={updateLoginFormData}/>,
       children: [
         {
           path: "/",
