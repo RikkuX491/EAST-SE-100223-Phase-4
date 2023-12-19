@@ -1,16 +1,17 @@
-# Lecture # 6 - Client & Server Communication
+# Lecture # 7 - Authentication
 
 ## Lecture Topics
 
-- Adding React to Flask
-- CORS (Cross-Origin Resource Sharing)
-- How to proxy the requests to our API
+- Logging in a user
+- Using a session to keep a user logged in
+- Logging out a user
+- Authenticating users
 
 ## Setup
 
 1. Clone this repository.
 
-2. Enter the command `git checkout 06_starter` in your terminal to switch to the `06_starter` branch that contains the content for this lecture.
+2. Enter the command `git checkout 07_starter` in your terminal to switch to the `07_starter` branch that contains the content for this lecture.
 
 3. Make sure that you are in the correct directory (folder) that contains a `Pipfile`, then enter the command `pipenv install` in your terminal to install the required libraries.
 
