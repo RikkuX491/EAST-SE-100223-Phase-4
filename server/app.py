@@ -6,6 +6,7 @@ from flask import Flask, make_response, request, session
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_cors import CORS
+from flask_bcrypt import Bcrypt
 
 from models import db, Hotel, Customer, Review
 
@@ -26,6 +27,8 @@ migrate = Migrate(app, db)
 
 # initialize the Flask application to use the database
 db.init_app(app)
+
+bcrypt = Bcrypt(app)
 
 api = Api(app)
 
@@ -121,13 +124,6 @@ class AllCustomers(Resource):
 
         return make_response(response_body, 200)
     
-    def post(self):
-        new_customer = Customer(first_name=request.json.get('first_name'), last_name=request.json.get('last_name'))
-        db.session.add(new_customer)
-        db.session.commit()
-        response_body = new_customer.to_dict(only=('id', 'first_name', 'last_name'))
-        return make_response(response_body, 201)
-    
 api.add_resource(AllCustomers, '/customers')
 
 class CustomerById(Resource):
@@ -217,8 +213,12 @@ api.add_resource(ReviewById, '/reviews/<int:id>')
 class Login(Resource):
 
     def post(self):
-        customer = Customer.query.filter_by(username=request.json.get('username')).first()
+        customer_username = request.json.get('username')
+        # customer_password = request.json.get('password')
 
+        customer = Customer.query.filter_by(username=customer_username).first()
+        
+        # if customer and bcrypt.check_password_hash(customer.password_hash, password):
         if customer:
             session['customer_id'] = customer.id
             response_body = customer.to_dict(rules=('-reviews',))
@@ -251,12 +251,28 @@ class Logout(Resource):
 
     def delete(self):
         session['customer_id'] = None
-        # del session['customer_id']
         print(session)
         response_body = {}
         return make_response(response_body, 204)
 
 api.add_resource(Logout, '/logout')
+
+class Signup(Resource):
+
+    def post(self):
+        customer_first_name = request.json.get('first_name')
+        customer_last_name = request.json.get('last_name')
+        customer_username = request.json.get('username')
+        # customer_password = request.json.get('password')
+        # pw_hash = bcrypt.generate_password_hash(customer_password).decode('utf-8')
+        # new_customer = Customer(..., password_hash=pw_hash)
+        new_customer = Customer(first_name=customer_first_name, last_name=customer_last_name, username=customer_username)
+        db.session.add(new_customer)
+        db.session.commit()
+        response_body = new_customer.to_dict(only=('id', 'first_name', 'last_name'))
+        return make_response(response_body, 201)
+    
+api.add_resource(Signup, '/signup')
 
 if __name__ == "__main__":
     app.run(port=7000, debug=True)
