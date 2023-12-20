@@ -1,5 +1,3 @@
-import {useState} from 'react'
-
 function LoginForm({logInCustomer, updateLoginFormData}){
 
     return (
@@ -8,6 +6,8 @@ function LoginForm({logInCustomer, updateLoginFormData}){
             <form onSubmit={logInCustomer}>
                 <label>Username: </label>
                 <input onChange={updateLoginFormData} type="text" name="username" placeholder="Enter your username..."/>
+                <label>Password: </label>
+                <input onChange={updateLoginFormData} type="password" name="password" placeholder="Enter your password..."/>
                 <input type="submit" value="Login"/>
             </form>
         </div>

@@ -50,6 +50,15 @@ class AllHotels(Resource):
         return make_response(response_body, 200)
     
     def post(self):
+
+        # Authorization (Lines 55 - 60) - Customer must be a VIP customer, otherwise they cannot add a new hotel
+        customer = Customer.query.filter_by(id=session.get('customer_id')).first()
+        if (not customer) or (customer.customer_type != 'VIP'):
+            response_body = {
+                'error': 'Only VIP customers can add hotels!'
+            }
+            return make_response(response_body, 401)
+        
         try:
             new_hotel = Hotel(name=request.json.get('name'), image=request.json.get('image'))
             db.session.add(new_hotel)
@@ -219,18 +228,17 @@ class Login(Resource):
 
     def post(self):
         customer_username = request.json.get('username')
-        # customer_password = request.json.get('password')
+        customer_password = request.json.get('password')
 
         customer = Customer.query.filter_by(username=customer_username).first()
         
-        # if customer and bcrypt.check_password_hash(customer.password_hash, password):
-        if customer:
+        if customer and bcrypt.check_password_hash(customer.password_hash, customer_password):
             session['customer_id'] = customer.id
             response_body = customer.to_dict(rules=('-reviews',))
             return make_response(response_body, 201)
         else:
             response_body = {
-                "error": "Invalid username!"
+                "error": "Invalid username or password!"
             }
             return make_response(response_body, 401)
 
@@ -268,12 +276,16 @@ class Signup(Resource):
         customer_first_name = request.json.get('first_name')
         customer_last_name = request.json.get('last_name')
         customer_username = request.json.get('username')
-        # customer_password = request.json.get('password')
-        # pw_hash = bcrypt.generate_password_hash(customer_password).decode('utf-8')
-        # new_customer = Customer(..., password_hash=pw_hash)
-        new_customer = Customer(first_name=customer_first_name, last_name=customer_last_name, username=customer_username)
+        customer_password = request.json.get('password')
+        # type_of_customer = request.json.get('customer_type')
+        pw_hash = bcrypt.generate_password_hash(customer_password).decode('utf-8')
+        new_customer = Customer(first_name=customer_first_name, last_name=customer_last_name, username=customer_username, customer_type='Standard', password_hash=pw_hash)
         db.session.add(new_customer)
         db.session.commit()
+
+        # Also set the session / cookie for logging in the customer and keeping them logged in
+        session['customer_id'] = new_customer.id
+
         response_body = new_customer.to_dict(rules=('-reviews',))
         return make_response(response_body, 201)
     

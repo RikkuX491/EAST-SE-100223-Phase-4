@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-from app import app
+import ipdb
+
+from app import app, bcrypt
 from models import db, Hotel, Customer, Review
 
 with app.app_context():
@@ -13,9 +15,13 @@ with app.app_context():
     hotel2 = Hotel(name = "Hampton Inn", image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp3A35WZQrIwq_UfQ_MFHA5InWDsTos6PIjQ&usqp=CAU")
     hotel3 = Hotel(name = "Hilton Resort", image="https://images.trvl-media.com/lodging/11000000/10970000/10961600/10961545/5b998347.jpg")
 
-    customer1 = Customer(username="alice123", first_name = "Alice", last_name = "Baker", customer_type="VIP")
-    customer2 = Customer(username="bruce456", first_name = "Bruce", last_name = "Wayne", customer_type="Standard")
-    customer3 = Customer(username="fred789", first_name = "Fred", last_name = "Flintstone", customer_type="Standard")
+    pw_hash_1 = bcrypt.generate_password_hash('pizza').decode('utf-8')
+    pw_hash_2 = bcrypt.generate_password_hash('python').decode('utf-8')
+    pw_hash_3 = bcrypt.generate_password_hash('flatironSchool').decode('utf-8')
+
+    customer1 = Customer(username="alice123", password_hash=pw_hash_1, first_name = "Alice", last_name = "Baker", customer_type="VIP")
+    customer2 = Customer(username="bruce456", password_hash=pw_hash_2, first_name = "Bruce", last_name = "Wayne", customer_type="Standard")
+    customer3 = Customer(username="fred789", password_hash=pw_hash_3, first_name = "Fred", last_name = "Flintstone", customer_type="Standard")
 
     review1 = Review(rating = 5, hotel = hotel1, customer = customer1)
     review2 = Review(rating = 4, hotel = hotel2, customer = customer1)

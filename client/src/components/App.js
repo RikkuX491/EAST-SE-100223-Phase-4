@@ -6,11 +6,17 @@ import Home from './Home'
 import HotelList from "./HotelList"
 import AddHotelForm from "./AddHotelForm"
 import UpdateHotelForm from "./UpdateHotelForm"
+import LoginForm from "./LoginForm"
+import SignupForm from "./SignupForm"
 
 function App() {
 
   const [customer, setCustomer] = useState(null)
-  const [loginFormData, setLoginFormData] = useState({})
+  const [loginFormData, setLoginFormData] = useState({
+    username: "",
+    password: ""
+  })
+  const [signupFormData, setSignupFormData] = useState({})
   
   const [hotels, setHotels] = useState([])
   const [postFormData, setPostFormData] = useState({})
@@ -53,8 +59,18 @@ function App() {
       },
       body: JSON.stringify(postFormData)
     })
-    .then(response => response.json())
-    .then(newHotel => setHotels(hotels => [...hotels, newHotel]))
+    .then(response => {
+      if(response.ok){
+        response.json().then(newHotel => setHotels(hotels => [...hotels, newHotel]))
+      }
+      else if(response.status === 401){
+        response.json().then(errorData => alert(errorData.error))
+      }
+      else{
+        alert("Error: Unable to add new hotel")
+      }
+    })
+    // .then(newHotel => setHotels(hotels => [...hotels, newHotel]))
   }
 
   function updateHotel(event){
@@ -118,7 +134,7 @@ function App() {
         })
       }
       else if(response.status === 401){
-        alert("Error: Invalid username!")
+        alert("Error: Invalid username or password!")
       }
       else{
         alert("Error: Unable to log in customer!")
@@ -144,6 +160,30 @@ function App() {
     })
   }
 
+  function updateSignupFormData(event){
+    setSignupFormData({...signupFormData, [event.target.name]: event.target.value})
+  }
+
+  function signUpCustomer(event){
+    event.preventDefault()
+    // console.log(signupFormData)
+    fetch('/signup', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(signupFormData)
+    })
+    .then(response => {
+      if(response.ok){
+        response.json().then(newCustomer => setCustomer(newCustomer))
+      }
+      else{
+        alert("Error: Unable to add new customer!")
+      }
+    })
+  }
+
   const routes = [
     {
       path: "/",
@@ -151,18 +191,28 @@ function App() {
       children: [
         {
           path: "/",
-          element: <>
-            <h1>Welcome! Here is the list of hotels available:</h1>
-            <HotelList hotels={hotels} deleteHotel={deleteHotel}/>
-          </>
+          element: customer ? 
+            <>
+              <h1>Welcome {customer.username}! Here is the list of hotels available:</h1>
+              <HotelList hotels={hotels} deleteHotel={deleteHotel}/>
+            </> :
+            <LoginForm logInCustomer={logInCustomer} updateLoginFormData={updateLoginFormData}/>
         },
         {
           path: "/add_hotel",
-          element: <AddHotelForm addHotel={addHotel} updatePostFormData={updatePostFormData}/>
+          element: customer ? <AddHotelForm addHotel={addHotel} updatePostFormData={updatePostFormData}/> : <LoginForm logInCustomer={logInCustomer} updateLoginFormData={updateLoginFormData}/>
         },
         {
           path: "/update_hotel",
-          element: <UpdateHotelForm updateHotel={updateHotel} setIdToUpdate={setIdToUpdate} updatePatchFormData={updatePatchFormData} hotels={hotels}/>
+          element: customer ? <UpdateHotelForm updateHotel={updateHotel} setIdToUpdate={setIdToUpdate} updatePatchFormData={updatePatchFormData} hotels={hotels}/> : <LoginForm logInCustomer={logInCustomer} updateLoginFormData={updateLoginFormData}/>
+        },
+        {
+          path: "/login",
+          element: <LoginForm logInCustomer={logInCustomer} updateLoginFormData={updateLoginFormData}/>
+        },
+        {
+          path: "/signup",
+          element: <SignupForm signUpCustomer={signUpCustomer} updateSignupFormData={updateSignupFormData}/>
         }
       ]
     }

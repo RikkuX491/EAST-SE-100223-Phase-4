@@ -22,7 +22,7 @@
 ```
 export FLASK_APP=app.py
 
-export FLASK_RUN_PORT=7777
+export FLASK_RUN_PORT=7000
 ```
 
 7. You can either enter `python app.py` or `flask run` in the terminal to run your Flask app.

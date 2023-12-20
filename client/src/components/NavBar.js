@@ -5,12 +5,20 @@ function NavBar({customer, logOutCustomer}){
     return (
         <nav>
             <div>
-                <NavLink to="/">Home</NavLink>
+                {customer ? <NavLink to="/">Home</NavLink> : null}
             </div>
             <div>
-                <NavLink to="/add_hotel">Add Hotel</NavLink>
-                <NavLink to="/update_hotel">Update Hotel</NavLink>
-                {customer ? <NavLink onClick={logOutCustomer} to="/">Logout</NavLink> : null}
+                {customer ?
+                <>
+                    <NavLink to="/add_hotel">Add Hotel</NavLink>
+                    <NavLink to="/update_hotel">Update Hotel</NavLink>
+                    <NavLink onClick={logOutCustomer} to="/">Logout</NavLink>
+                </> :
+                <>
+                    <NavLink to="/signup">Signup</NavLink>
+                    <NavLink to="/login">Login</NavLink>
+                </>
+                }
             </div>
         </nav>
     )
