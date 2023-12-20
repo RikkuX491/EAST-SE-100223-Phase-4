@@ -25,6 +25,8 @@ export FLASK_APP=app.py
 export FLASK_RUN_PORT=7777
 ```
 
-7. Open a new terminal and enter the command `npm install --prefix client` to install the dependencies for your React app.
+7. You can either enter `python app.py` or `flask run` in the terminal to run your Flask app.
 
-8. Enter the command `npm start --prefix client` to start the React app.
+8. Open a new terminal and enter the command `npm install --prefix client` to install the dependencies for your React app.
+
+9. Enter the command `npm start --prefix client` to start the React app.
