@@ -13,9 +13,9 @@ with app.app_context():
     hotel2 = Hotel(name = "Hampton Inn", image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp3A35WZQrIwq_UfQ_MFHA5InWDsTos6PIjQ&usqp=CAU")
     hotel3 = Hotel(name = "Hilton Resort", image="https://images.trvl-media.com/lodging/11000000/10970000/10961600/10961545/5b998347.jpg")
 
-    customer1 = Customer(username="alice123", first_name = "Alice", last_name = "Baker")
-    customer2 = Customer(username="bruce456", first_name = "Bruce", last_name = "Wayne")
-    customer3 = Customer(username="fred789", first_name = "Fred", last_name = "Flintstone")
+    customer1 = Customer(username="alice123", first_name = "Alice", last_name = "Baker", customer_type="VIP")
+    customer2 = Customer(username="bruce456", first_name = "Bruce", last_name = "Wayne", customer_type="Standard")
+    customer3 = Customer(username="fred789", first_name = "Fred", last_name = "Flintstone", customer_type="Standard")
 
     review1 = Review(rating = 5, hotel = hotel1, customer = customer1)
     review2 = Review(rating = 4, hotel = hotel2, customer = customer1)

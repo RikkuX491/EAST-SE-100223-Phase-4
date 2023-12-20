@@ -17,6 +17,10 @@ function App() {
   const [idToUpdate, setIdToUpdate] = useState(0)
   const [patchFormData, setPatchFormData] = useState({})
 
+  if(customer){
+    console.log(`${customer.username} is a ${customer.customer_type} customer!`)
+  }
+
   useEffect(() => {
     fetch('/check_session')
     .then(response => {

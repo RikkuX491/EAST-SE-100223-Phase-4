@@ -44,6 +44,7 @@ class Customer(db.Model, SerializerMixin):
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)
     username = db.Column(db.String, nullable=False)
+    customer_type = db.Column(db.String, nullable=False)
 
     __table_args__ = (
         db.CheckConstraint('first_name != last_name'),

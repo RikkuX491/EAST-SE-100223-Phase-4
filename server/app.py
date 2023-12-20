@@ -32,6 +32,11 @@ bcrypt = Bcrypt(app)
 
 api = Api(app)
 
+# @app.before_request
+# def check_if_customer_is_vip():
+#     if (condition goes here):
+#         return {'error': 'Unauthorized'}, 401
+
 class AllHotels(Resource):
 
     def get(self):
@@ -269,7 +274,7 @@ class Signup(Resource):
         new_customer = Customer(first_name=customer_first_name, last_name=customer_last_name, username=customer_username)
         db.session.add(new_customer)
         db.session.commit()
-        response_body = new_customer.to_dict(only=('id', 'first_name', 'last_name'))
+        response_body = new_customer.to_dict(rules=('-reviews',))
         return make_response(response_body, 201)
     
 api.add_resource(Signup, '/signup')
