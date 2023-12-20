@@ -16,4 +16,4 @@
 |5 | REST APIs with Flask (Part 2)    	|[Video](https://www.youtube.com/watch?v=f601pjMsNno)|[05_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/05_starter)|[05_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/05_solution)|
 |6 | Client & Server Communication                    	|[Video](https://www.youtube.com/watch?v=x9OKetG4h3s)|[06_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/06_starter)|[06_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/06_solution)|
 |7 | Authentication                    	|[Video](https://www.youtube.com/watch?v=s3fwvTZ6vjU)|[07_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/07_starter)|[07_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/07_solution)|
-|8 | Authorization                    	| | | |
+|8 | Authorization                    	| |[08_starter](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/08_starter)|[08_solution](https://github.com/RikkuX491/EAST-SE-100223-Phase-4/tree/08_solution)|
