@@ -1,17 +1,15 @@
-# Lecture # 7 - Authentication
+# Lecture # 8 - Authorization
 
 ## Lecture Topics
 
-- Logging in a user
-- Using a session to keep a user logged in
-- Logging out a user
-- Authenticating users
+- Authorizing Requests
+- Password Protection with Bcrypt
 
 ## Setup
 
 1. Clone this repository.
 
-2. Enter the command `git checkout 07_starter` in your terminal to switch to the `07_starter` branch that contains the content for this lecture.
+2. Enter the command `git checkout 08_starter` in your terminal to switch to the `08_starter` branch that contains the content for this lecture.
 
 3. Make sure that you are in the correct directory (folder) that contains a `Pipfile`, then enter the command `pipenv install` in your terminal to install the required libraries.
 
@@ -26,3 +24,7 @@ export FLASK_APP=app.py
 
 export FLASK_RUN_PORT=7777
 ```
+
+7. Open a new terminal and enter the command `npm install --prefix client` to install the dependencies for your React app.
+
+8. Enter the command `npm start --prefix client` to start the React app.
